@@ -1,17 +1,18 @@
 import pathlib
 import pickle
-import pandas as pd
+from datetime import date
+
+import mlflow
 import numpy as np
+import pandas as pd
 import scipy
 import sklearn
-from sklearn.feature_extraction import DictVectorizer
-from sklearn.metrics import mean_squared_error
-import mlflow
 import xgboost as xgb
 from prefect import flow, task
-from prefect_aws import S3Bucket
 from prefect.artifacts import create_markdown_artifact
-from datetime import date
+from prefect_aws import S3Bucket
+from sklearn.feature_extraction import DictVectorizer
+from sklearn.metrics import mean_squared_error
 
 
 @task(retries=3, retry_delay_seconds=2)
@@ -34,9 +35,7 @@ def read_data(filename: str) -> pd.DataFrame:
 
 
 @task
-def add_features(
-    df_train: pd.DataFrame, df_val: pd.DataFrame
-) -> tuple(
+def add_features(df_train: pd.DataFrame, df_val: pd.DataFrame) -> tuple(
     [
         scipy.sparse._csr.csr_matrix,
         scipy.sparse._csr.csr_matrix,
@@ -114,7 +113,7 @@ def train_best_model(
 
 ## Summary
 
-Duration Prediction 
+Duration Prediction
 
 ## RMSE XGBoost Model
 
@@ -123,9 +122,7 @@ Duration Prediction
 | {date.today()} | {rmse:.2f} |
 """
 
-        create_markdown_artifact(
-            key="duration-model-report", markdown=markdown__rmse_report
-        )
+        create_markdown_artifact(key="duration-model-report", markdown=markdown__rmse_report)
 
     return None
 

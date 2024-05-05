@@ -1,10 +1,9 @@
 import os
 import pickle
+
 import click
 import pandas as pd
-
 import wandb
-
 from sklearn.feature_extraction import DictVectorizer
 
 
@@ -41,9 +40,7 @@ def preprocess(df: pd.DataFrame, dv: DictVectorizer, fit_dv: bool = False):
 @click.command()
 @click.option("--wandb_project", help="Name of Weights & Biases project")
 @click.option("--wandb_entity", help="Name of Weights & Biases entity")
-@click.option(
-    "--raw_data_path", help="Location where the raw NYC taxi trip data was saved"
-)
+@click.option("--raw_data_path", help="Location where the raw NYC taxi trip data was saved")
 @click.option("--dest_path", help="Location where the resulting files will be saved")
 def run_data_prep(
     wandb_project: str,
@@ -56,15 +53,9 @@ def run_data_prep(
     wandb.init(project=wandb_project, entity=wandb_entity, job_type="preprocess")
 
     # Load parquet files
-    df_train = read_dataframe(
-        os.path.join(raw_data_path, f"{dataset}_tripdata_2022-01.parquet")
-    )
-    df_val = read_dataframe(
-        os.path.join(raw_data_path, f"{dataset}_tripdata_2022-02.parquet")
-    )
-    df_test = read_dataframe(
-        os.path.join(raw_data_path, f"{dataset}_tripdata_2022-03.parquet")
-    )
+    df_train = read_dataframe(os.path.join(raw_data_path, f"{dataset}_tripdata_2022-01.parquet"))
+    df_val = read_dataframe(os.path.join(raw_data_path, f"{dataset}_tripdata_2022-02.parquet"))
+    df_test = read_dataframe(os.path.join(raw_data_path, f"{dataset}_tripdata_2022-03.parquet"))
 
     # Extract the target
     target = "tip_amount"
