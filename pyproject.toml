@@ -23,6 +23,9 @@ pandas = "*"
 numpy = "*"
 pyarrow = "*"
 fastparquet = "*"
+mlflow = "*"
+hyperopt = "*"
+xgboost = "*"
 
 [build-system]
 requires = ["poetry-core"]
